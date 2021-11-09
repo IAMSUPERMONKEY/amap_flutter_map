@@ -69,6 +69,8 @@
                 [AMapServices sharedServices].apiKey = iosKey;
             }
         }
+        [MAMapView updatePrivacyAgree:1];
+        [MAMapView updatePrivacyShow:1 privacyInfo:1];
         //这里统一检查key的设置是否生效
         NSAssert(([AMapServices sharedServices].apiKey != nil), @"没有设置APIKey，请先设置key");
         
@@ -215,7 +217,6 @@
 //MARK: MAMapViewDelegate
 
 //MARK: 定位相关回调
-
 - (void)mapView:(MAMapView *)mapView didChangeUserTrackingMode:(MAUserTrackingMode)mode animated:(BOOL)animated {
     NSLog(@"%s,mapView:%@ mode:%ld",__func__,mapView,(long)mode);
 }
