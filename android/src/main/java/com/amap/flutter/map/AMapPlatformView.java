@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
+import com.amap.api.maps.MapsInitializer;
 import com.amap.api.maps.TextureMapView;
 import com.amap.flutter.map.core.MapController;
 import com.amap.flutter.map.overlays.marker.MarkersController;
@@ -64,6 +65,8 @@ public class AMapPlatformView
         methodChannel.setMethodCallHandler(this);
         myMethodCallHandlerMap = new HashMap<String, MyMethodCallHandler>(8);
 
+        MapsInitializer.updatePrivacyShow(context,true,true);
+        MapsInitializer.updatePrivacyAgree(context,true);
         try {
             mapView = new TextureMapView(context, options);
             AMap amap = mapView.getMap();
