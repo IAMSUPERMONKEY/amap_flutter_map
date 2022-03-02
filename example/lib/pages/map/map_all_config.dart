@@ -67,8 +67,7 @@ class _MapUiBodyState extends State<_MapUiBody> {
   CustomStyleOptions _customStyleOptions = CustomStyleOptions(false);
 
   ///自定义定位小蓝点
-  MyLocationStyleOptions _myLocationStyleOptions =
-      MyLocationStyleOptions(false);
+  MyLocationStyleOptions _myLocationStyleOptions = MyLocationStyleOptions(false);
   @override
   void initState() {
     super.initState();
@@ -78,16 +77,17 @@ class _MapUiBodyState extends State<_MapUiBody> {
   void _loadCustomData() async {
     ByteData styleByteData = await rootBundle.load('assets/style.data');
     _customStyleOptions.styleData = styleByteData.buffer.asUint8List();
-    ByteData styleExtraByteData =
-        await rootBundle.load('assets/style_extra.data');
-    _customStyleOptions.styleExtraData =
-        styleExtraByteData.buffer.asUint8List();
+    ByteData styleExtraByteData = await rootBundle.load('assets/style_extra.data');
+    _customStyleOptions.styleExtraData = styleExtraByteData.buffer.asUint8List();
   }
 
   @override
   Widget build(BuildContext context) {
     final AMapWidget map = AMapWidget(
       apiKey: ConstConfig.amapApiKeys,
+
+      ///必须正确设置的合规隐私声明，否则SDK不会工作，会造成地图白屏等问题。
+      privacyStatement: ConstConfig.amapPrivacyStatement,
       initialCameraPosition: _kInitialPosition,
       mapType: _mapType,
       trafficEnabled: _trafficEnabled,
@@ -270,8 +270,7 @@ class _MapUiBodyState extends State<_MapUiBody> {
           children: [
             // Text('定位小蓝点', style: TextStyle(fontWeight: FontWeight.w600)),
             AMapSwitchButton(
-              label:
-                  Text('定位小蓝点', style: TextStyle(fontWeight: FontWeight.w600)),
+              label: Text('定位小蓝点', style: TextStyle(fontWeight: FontWeight.w600)),
               defaultValue: _myLocationStyleOptions.enabled,
               onSwitchChanged: (value) => {
                 setState(() {
@@ -365,10 +364,8 @@ class _MapUiBodyState extends State<_MapUiBody> {
   }
 
   void printApprovalNumber() async {
-    String mapContentApprovalNumber =
-        (await _controller.getMapContentApprovalNumber())!;
-    String satelliteImageApprovalNumber =
-        (await _controller.getSatelliteImageApprovalNumber())!;
+    String mapContentApprovalNumber = (await _controller.getMapContentApprovalNumber())!;
+    String satelliteImageApprovalNumber = (await _controller.getSatelliteImageApprovalNumber())!;
     print('地图审图号（普通地图）: $mapContentApprovalNumber');
     print('地图审图号（卫星地图): $satelliteImageApprovalNumber');
   }
@@ -391,11 +388,8 @@ class _MapUiBodyState extends State<_MapUiBody> {
 
   //移动地图中心点到首开广场
   void _moveCameraToShoukai() {
-    _controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(39.993306, 116.473004),
-        zoom: 18,
-        tilt: 30,
-        bearing: 30)));
+    _controller.moveCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: LatLng(39.993306, 116.473004), zoom: 18, tilt: 30, bearing: 30)));
   }
 
   void _onLocationChanged(AMapLocation location) {

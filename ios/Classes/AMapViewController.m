@@ -69,18 +69,24 @@
                 [AMapServices sharedServices].apiKey = iosKey;
             }
         }
-        [MAMapView updatePrivacyAgree:1];
-        [MAMapView updatePrivacyShow:1 privacyInfo:1];
         //这里统一检查key的设置是否生效
         NSAssert(([AMapServices sharedServices].apiKey != nil), @"没有设置APIKey，请先设置key");
-        
+
         NSDictionary *cameraDict = [dict objectForKey:@"initialCameraPosition"];
         AMapCameraPosition *cameraPosition = [AMapJsonUtils modelFromDict:cameraDict modelClass:[AMapCameraPosition class]];
-        
+
         _viewId = viewId;
-        
+
+        if ([dict objectForKey:@"privacyStatement"] != nil) {
+            [self updatePrivacyStateWithDict:[dict objectForKey:@"privacyStatement"]];
+        }
+
+
         self.mapInitCompleted = NO;
         _mapView = [[MAMapView alloc] initWithFrame:frame];
+        if (_mapView == nil && (MAMapVersionNumber) >= 80100) {
+            NSAssert(_mapView,@"MAMapView初始化失败，地图SDK8.1.0及以上，请务必确保调用SDK任何接口前先调用更新隐私合规updatePrivacyShow:privacyInfo、updatePrivacyAgree两个接口");
+        }
         _mapView.delegate = self;
         _mapView.accessibilityElementsHidden = NO;
         [_mapView setCameraPosition:cameraPosition animated:NO duration:0];
@@ -90,7 +96,7 @@
         if (MAMapRectIsEmpty(self.initLimitMapRect) == NO) {//限制了显示区域，则添加KVO监听
             [_mapView addObserver:self forKeyPath:@"frame" options:0 context:nil];
         }
-        
+
         _markerController = [[AMapMarkerController alloc] init:_channel
                                                        mapView:_mapView
                                                      registrar:registrar];
@@ -112,7 +118,7 @@
         if ([polygonsToAdd isKindOfClass:[NSArray class]]) {
             [_polygonsController addPolygons:polygonsToAdd];
         }
-        
+
         [self setMethodCallHandler];
     }
     return self;
@@ -125,6 +131,22 @@
 - (void)dealloc {
     if (MAMapRectIsEmpty(_initLimitMapRect) == NO) {//避免没有开始渲染，frame监听还存在时，快速销毁
         [_mapView removeObserver:self forKeyPath:@"frame"];
+    }
+}
+
+- (void)updatePrivacyStateWithDict:(NSDictionary *)dict {
+    if ((MAMapVersionNumber) < 80100) {
+        NSLog(@"当前地图SDK版本没有隐私合规接口，请升级地图SDK到8.1.0及以上版本");
+        return;
+    }
+    if (dict == nil || [dict isKindOfClass:[NSDictionary class]] == NO) {
+        return;
+    }
+    if (dict[@"hasContains"] != nil && dict[@"hasShow"] != nil) {
+        [MAMapView updatePrivacyShow:[dict[@"hasShow"] integerValue] privacyInfo:[dict[@"hasContains"] integerValue]];
+    }
+    if (dict[@"hasAgree"] != nil) {
+        [MAMapView updatePrivacyAgree:[dict[@"hasAgree"] integerValue]];
     }
 }
 
@@ -217,6 +239,7 @@
 //MARK: MAMapViewDelegate
 
 //MARK: 定位相关回调
+
 - (void)mapView:(MAMapView *)mapView didChangeUserTrackingMode:(MAUserTrackingMode)mode animated:(BOOL)animated {
     NSLog(@"%s,mapView:%@ mode:%ld",__func__,mapView,(long)mode);
 }
