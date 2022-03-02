@@ -30,9 +30,18 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+    dependencies {
+        implementation fileTree(include: ['*.jar'], dir: 'libs')
+        implementation('com.amap.api:3dmap:8.1.0')
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
 }
 
-dependencies {
-    compileOnly 'com.amap.api:3dmap:7.6.0'
-}
 
