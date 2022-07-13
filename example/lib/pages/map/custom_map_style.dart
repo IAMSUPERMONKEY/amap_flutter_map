@@ -29,10 +29,8 @@ class _CustomMapStyleState extends State<_CustomMapStyleBody> {
   void _loadCustomData() async {
     ByteData styleByteData = await rootBundle.load('assets/style.data');
     _customStyleOptions.styleData = styleByteData.buffer.asUint8List();
-    ByteData styleExtraByteData =
-        await rootBundle.load('assets/style_extra.data');
-    _customStyleOptions.styleExtraData =
-        styleExtraByteData.buffer.asUint8List();
+    ByteData styleExtraByteData = await rootBundle.load('assets/style_extra.data');
+    _customStyleOptions.styleExtraData = styleExtraByteData.buffer.asUint8List();
     //如果需要加载完成后直接展示自定义地图，可以通过setState修改CustomStyleOptions的enable为true
     // setState(() {
     //   _customStyleOptions.enabled = true;
@@ -49,6 +47,7 @@ class _CustomMapStyleState extends State<_CustomMapStyleBody> {
   Widget build(BuildContext context) {
     final AMapWidget map = AMapWidget(
       apiKey: ConstConfig.amapApiKeys,
+      privacyStatement: ConstConfig.amapPrivacyStatement,
       onMapCreated: onMapCreated,
       customStyleOptions: _customStyleOptions,
     );
@@ -89,6 +88,6 @@ class _CustomMapStyleState extends State<_CustomMapStyleBody> {
   }
 
   void onMapCreated(AMapController controller) {
-      _mapCreated = true;
+    _mapCreated = true;
   }
 }

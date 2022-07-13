@@ -139,4 +139,9 @@ class AMapController {
   Future<void> clearDisk() {
     return _methodChannel.clearDisk(mapId: mapId);
   }
+
+  /// 显示makerIds
+  Future<void> showsAnnotations({required List<String> markerIds, Rect? edgeInsets}) {
+    return _methodChannel.showsAnnotations(mapId: mapId, markerIds: markerIds, edgeInsets: edgeInsets);
+  }
 }

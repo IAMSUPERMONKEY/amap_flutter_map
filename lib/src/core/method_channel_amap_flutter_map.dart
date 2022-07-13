@@ -87,9 +87,7 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
   }
 
   @override
-  Widget buildView(
-      Map<String, dynamic> creationParams,
-      Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+  Widget buildView(Map<String, dynamic> creationParams, Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
       void Function(int id) onPlatformViewCreated) {
     if (defaultTargetPlatform == TargetPlatform.android) {
       creationParams['debugMode'] = kDebugMode;
@@ -113,12 +111,10 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
   }
 
   // handleMethodCall的`broadcast`
-  final StreamController<MapEvent> _mapEventStreamController =
-      StreamController<MapEvent>.broadcast();
+  final StreamController<MapEvent> _mapEventStreamController = StreamController<MapEvent>.broadcast();
 
   // 根据mapid返回相应的event.
-  Stream<MapEvent> _events(int mapId) =>
-      _mapEventStreamController.stream.where((event) => event.mapId == mapId);
+  Stream<MapEvent> _events(int mapId) => _mapEventStreamController.stream.where((event) => event.mapId == mapId);
 
   //定位回调
   Stream<LocationChangedEvent> onLocationChanged({required int mapId}) {
@@ -163,8 +159,7 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     switch (call.method) {
       case 'location#changed':
         try {
-          _mapEventStreamController.add(LocationChangedEvent(
-              mapId, AMapLocation.fromMap(call.arguments['location'])!));
+          _mapEventStreamController.add(LocationChangedEvent(mapId, AMapLocation.fromMap(call.arguments['location'])!));
         } catch (e) {
           print("location#changed error=======>" + e.toString());
         }
@@ -172,27 +167,25 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
 
       case 'camera#onMove':
         try {
-          _mapEventStreamController.add(CameraPositionMoveEvent(
-              mapId, CameraPosition.fromMap(call.arguments['position'])!));
+          _mapEventStreamController
+              .add(CameraPositionMoveEvent(mapId, CameraPosition.fromMap(call.arguments['position'])!));
         } catch (e) {
           print("camera#onMove error===>" + e.toString());
         }
         break;
       case 'camera#onMoveEnd':
         try {
-          _mapEventStreamController.add(CameraPositionMoveEndEvent(
-              mapId, CameraPosition.fromMap(call.arguments['position'])!));
+          _mapEventStreamController
+              .add(CameraPositionMoveEndEvent(mapId, CameraPosition.fromMap(call.arguments['position'])!));
         } catch (e) {
           print("camera#onMoveEnd error===>" + e.toString());
         }
         break;
       case 'map#onTap':
-        _mapEventStreamController
-            .add(MapTapEvent(mapId, LatLng.fromJson(call.arguments['latLng'])!));
+        _mapEventStreamController.add(MapTapEvent(mapId, LatLng.fromJson(call.arguments['latLng'])!));
         break;
       case 'map#onLongPress':
-        _mapEventStreamController.add(MapLongPressEvent(
-            mapId, LatLng.fromJson(call.arguments['latLng'])!));
+        _mapEventStreamController.add(MapLongPressEvent(mapId, LatLng.fromJson(call.arguments['latLng'])!));
         break;
 
       case 'marker#onTap':
@@ -202,19 +195,15 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
         ));
         break;
       case 'marker#onDragEnd':
-        _mapEventStreamController.add(MarkerDragEndEvent(
-            mapId,
-            LatLng.fromJson(call.arguments['position'])!,
-            call.arguments['markerId']));
+        _mapEventStreamController
+            .add(MarkerDragEndEvent(mapId, LatLng.fromJson(call.arguments['position'])!, call.arguments['markerId']));
         break;
       case 'polyline#onTap':
-        _mapEventStreamController
-            .add(PolylineTapEvent(mapId, call.arguments['polylineId']));
+        _mapEventStreamController.add(PolylineTapEvent(mapId, call.arguments['polylineId']));
         break;
       case 'map#onPoiTouched':
         try {
-          _mapEventStreamController.add(
-              MapPoiTouchEvent(mapId, AMapPoi.fromJson(call.arguments['poi'])!));
+          _mapEventStreamController.add(MapPoiTouchEvent(mapId, AMapPoi.fromJson(call.arguments['poi'])!));
         } catch (e) {
           print('map#onPoiTouched error===>' + e.toString());
         }
@@ -229,17 +218,13 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     bool animated = true,
     int duration = 0,
   }) {
-    return channel(mapId).invokeMethod<void>('camera#move', <String, dynamic>{
-      'cameraUpdate': cameraUpdate.toJson(),
-      'animated': animated,
-      'duration': duration
-    });
+    return channel(mapId).invokeMethod<void>('camera#move',
+        <String, dynamic>{'cameraUpdate': cameraUpdate.toJson(), 'animated': animated, 'duration': duration});
   }
 
   ///设置地图每秒渲染的帧数
   Future<void> setRenderFps(int fps, {required int mapId}) {
-    return channel(mapId)
-        .invokeMethod<void>('map#setRenderFps', <String, dynamic>{
+    return channel(mapId).invokeMethod<void>('map#setRenderFps', <String, dynamic>{
       'fps': fps,
     });
   }
@@ -262,13 +247,24 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
   Future<String?> getSatelliteImageApprovalNumber({
     required int mapId,
   }) {
-    return channel(mapId)
-        .invokeMethod<String>('map#satelliteImageApprovalNumber');
+    return channel(mapId).invokeMethod<String>('map#satelliteImageApprovalNumber');
   }
 
   Future<void> clearDisk({
     required int mapId,
   }) {
     return channel(mapId).invokeMethod<void>('map#clearDisk');
+  }
+
+  Future<void> showsAnnotations({
+    required int mapId,
+    required List<String> markerIds,
+    Rect? edgeInsets,
+  }) {
+    String _insets = "{0,0,0,0}";
+    if (edgeInsets != null) {
+      _insets = "{${edgeInsets.top},${edgeInsets.left},${edgeInsets.bottom},${edgeInsets.right}}";
+    }
+    return channel(mapId).invokeMethod<void>('map#showsAnnotations', {"markerIds": markerIds, "edgeInsets": _insets});
   }
 }

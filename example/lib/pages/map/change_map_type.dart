@@ -41,6 +41,7 @@ class _PageBodyState extends State<_PageBody> {
       apiKey: ConstConfig.amapApiKeys,
       //地图类型属性
       mapType: _mapType,
+      privacyStatement: ConstConfig.amapPrivacyStatement,
     );
     return Container(
       height: MediaQuery.of(context).size.height,

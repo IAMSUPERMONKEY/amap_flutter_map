@@ -234,6 +234,49 @@
         [weakSelf.mapView clearDisk];
         result(nil);
     }];
+    [self.channel addMethodName:@"map#showsAnnotations" withHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
+        NSMutableArray *array = [NSMutableArray array];
+        NSArray *markerIds = call.arguments[@"markerIds"];
+        UIEdgeInsets edgeInset = UIEdgeInsetsFromString(call.arguments[@"edgeInsets"]);
+        NSLog(@"markerIds = %@, edgeInsets = %@", markerIds, @(edgeInset));
+        [weakSelf.mapView.annotations enumerateObjectsUsingBlock:^(MAPointAnnotation  * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+          if([markerIds containsObject:obj.markerId]) {
+            [array addObject:obj];
+          }
+        }];
+        NSLog(@"array = %@", array);
+        if([array count] != 0) {
+          [weakSelf showsAnnotations:array edgePadding:edgeInset andMapView:weakSelf.mapView];
+        }
+        result(nil);
+    }];
+//
+}
+
+/**
+* brief 根据传入的annotation来展现：保持中心点不变的情况下，展示所有传入annotation
+* @param annotations annotation
+* @param insets 填充框，用于让annotation不会靠在地图边缘显示
+* @param mapView 地图view
+*/
+- (void)showsAnnotations:(NSArray *)annotations edgePadding:(UIEdgeInsets)insets andMapView:(MAMapView *)mapView {
+    MAMapRect rect = MAMapRectZero;
+
+    for (MAPointAnnotation *annotation in annotations) {
+
+        ///annotation相对于中心点的对角线坐标
+        CLLocationCoordinate2D diagonalPoint = CLLocationCoordinate2DMake(mapView.centerCoordinate.latitude - (annotation.coordinate.latitude - mapView.centerCoordinate.latitude),mapView.centerCoordinate.longitude - (annotation.coordinate.longitude - mapView.centerCoordinate.longitude));
+
+        MAMapPoint annotationMapPoint = MAMapPointForCoordinate(annotation.coordinate);
+        MAMapPoint diagonalPointMapPoint = MAMapPointForCoordinate(diagonalPoint);
+
+        ///根据annotation点和对角线点计算出对应的rect（相对于中心点）
+        MAMapRect annotationRect = MAMapRectMake(MIN(annotationMapPoint.x, diagonalPointMapPoint.x), MIN(annotationMapPoint.y, diagonalPointMapPoint.y), ABS(annotationMapPoint.x - diagonalPointMapPoint.x), ABS(annotationMapPoint.y - diagonalPointMapPoint.y));
+
+        rect = MAMapRectUnion(rect, annotationRect);
+    }
+
+    [mapView setVisibleMapRect:rect edgePadding:insets animated:YES];
 }
 
 //MARK: MAMapViewDelegate

@@ -26,6 +26,7 @@ class _BodyState extends State<_Body> {
   Widget build(BuildContext context) {
     final AMapWidget amap = AMapWidget(
       apiKey: ConstConfig.amapApiKeys,
+      privacyStatement: ConstConfig.amapPrivacyStatement,
       onMapCreated: _onMapCreated,
       onCameraMove: _onCameraMove,
       onCameraMoveEnd: _onCameraMoveEnd,

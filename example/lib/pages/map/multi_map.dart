@@ -1,6 +1,7 @@
 import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:amap_flutter_map/amap_flutter_map.dart';
 import 'package:amap_flutter_map_example/base_page.dart';
+import 'package:amap_flutter_map_example/const_config.dart';
 import 'package:flutter/material.dart';
 
 class MultiMapDemoPage extends BasePage {
@@ -27,13 +28,18 @@ class _MultiMapDemoState extends State<_MultiMapDemoBody> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Expanded(child: AMapWidget()),
+          Expanded(
+              child: AMapWidget(
+            apiKey: ConstConfig.amapApiKeys,
+            privacyStatement: ConstConfig.amapPrivacyStatement,
+          )),
           Padding(padding: EdgeInsets.all(5.0)),
           //第二个地图指定初始位置为上海
           Expanded(
               child: AMapWidget(
-            initialCameraPosition:
-                CameraPosition(target: LatLng(31.230378, 121.473658)),
+            apiKey: ConstConfig.amapApiKeys,
+            privacyStatement: ConstConfig.amapPrivacyStatement,
+            initialCameraPosition: CameraPosition(target: LatLng(31.230378, 121.473658)),
           )),
         ],
       ),
