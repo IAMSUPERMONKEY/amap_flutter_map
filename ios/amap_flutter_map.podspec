@@ -16,7 +16,7 @@ A new Flutter plugin.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'AMap3DMap'
+  s.dependency 'AMap3DMap', '8.1.0'
   s.static_framework = true
   s.platform = :ios, '8.0'
 
