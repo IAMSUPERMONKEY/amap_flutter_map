@@ -4,18 +4,18 @@ version '1.0'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:7.4.2'
     }
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -32,13 +32,16 @@ android {
     }
     dependencies {
         implementation fileTree(include: ['*.jar'], dir: 'libs')
-        implementation('com.amap.api:3dmap:8.1.0')
+        implementation('com.amap.api:3dmap:9.1.0')
+    }
+    lint {
+        checkReleaseBuilds false
+        disable 'InvalidPackage'
     }
 
     buildTypes {
         release {
             minifyEnabled true
-            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
