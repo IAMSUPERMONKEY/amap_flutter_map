@@ -3,10 +3,11 @@
 // found in the LICENSE file.
 
 import 'dart:ui' show hashValues, Offset;
-import 'package:amap_flutter_map/src/types/base_overlay.dart';
+
 import 'package:amap_flutter_base/amap_flutter_base.dart';
+import 'package:amap_flutter_map/src/types/base_overlay.dart';
+
 import 'bitmap.dart';
-import 'base_overlay.dart';
 
 /// Marker拖动回调
 typedef void MarkerDragEndCallback(String id, LatLng endPosition);
@@ -60,7 +61,7 @@ class InfoWindow {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    if (other is !InfoWindow) {
+    if (other is! InfoWindow) {
       return false;
     }
     final InfoWindow typedOther = other;
@@ -68,7 +69,7 @@ class InfoWindow {
   }
 
   @override
-  int get hashCode => hashValues(title, snippet);
+  int get hashCode => Object.hash(title, snippet);
 
   @override
   String toString() {
@@ -98,12 +99,7 @@ class Marker extends BaseOverlay {
         // ignore: unnecessary_null_comparison
         this.anchor = (anchor == null
             ? Offset(0.5, 1.0)
-            : ((anchor.dx < 0 ||
-                    anchor.dx > 1 ||
-                    anchor.dy < 0 ||
-                    anchor.dy > 1)
-                ? Offset(0.5, 1.0)
-                : anchor)),
+            : ((anchor.dx < 0 || anchor.dx > 1 || anchor.dy < 0 || anchor.dy > 1) ? Offset(0.5, 1.0) : anchor)),
         super();
 
   /// 透明度
@@ -161,7 +157,7 @@ class Marker extends BaseOverlay {
     LatLng? positionParam,
     double? rotationParam,
     bool? visibleParam,
-    ArgumentCallback<String?> ? onTapParam,
+    ArgumentCallback<String?>? onTapParam,
     MarkerDragEndCallback? onDragEndParam,
   }) {
     Marker copyMark = Marker(
@@ -218,7 +214,7 @@ class Marker extends BaseOverlay {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    if(other is !Marker) return false;
+    if (other is! Marker) return false;
     final Marker typedOther = other;
     return id == typedOther.id &&
         alpha == typedOther.alpha &&
@@ -247,6 +243,6 @@ class Marker extends BaseOverlay {
 }
 
 Map<String, Marker> keyByMarkerId(Iterable<Marker> markers) {
-  return Map<String, Marker>.fromEntries(markers.map(
-      (Marker marker) => MapEntry<String, Marker>(marker.id, marker.clone())));
+  return Map<String, Marker>.fromEntries(
+      markers.map((Marker marker) => MapEntry<String, Marker>(marker.id, marker.clone())));
 }

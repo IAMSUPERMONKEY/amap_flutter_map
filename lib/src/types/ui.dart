@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui' show Color, hashValues;
+
 import 'package:amap_flutter_base/amap_flutter_base.dart';
 import 'package:amap_flutter_map/amap_flutter_map.dart';
 
@@ -73,8 +74,7 @@ class MinMaxZoomPreference {
   final double? maxZoom;
 
   /// 高德地图默认zoomLevel的范围.
-  static const MinMaxZoomPreference defaultPreference =
-      MinMaxZoomPreference(3, 20);
+  static const MinMaxZoomPreference defaultPreference = MinMaxZoomPreference(3, 20);
 
   /// JSON序列化.
   dynamic toJson() => <dynamic>[minZoom, maxZoom];
@@ -88,7 +88,7 @@ class MinMaxZoomPreference {
   }
 
   @override
-  int get hashCode => hashValues(minZoom, maxZoom);
+  int get hashCode => Object.hash(minZoom, maxZoom);
 
   @override
   String toString() {
@@ -165,7 +165,7 @@ class MyLocationStyleOptions {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (runtimeType != other.runtimeType) return false;
-    if (other is !MyLocationStyleOptions) return false;
+    if (other is! MyLocationStyleOptions) return false;
     final MyLocationStyleOptions typedOther = other;
     return enabled == typedOther.enabled &&
         circleFillColor == typedOther.circleFillColor &&
@@ -183,8 +183,7 @@ class MyLocationStyleOptions {
   }
 
   @override
-  int get hashCode =>
-      hashValues(enabled, circleFillColor, circleStrokeColor, icon);
+  int get hashCode => Object.hash(enabled, circleFillColor, circleStrokeColor, icon);
 }
 
 ///地图自定义样式
@@ -233,7 +232,7 @@ class CustomStyleOptions {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (runtimeType != other.runtimeType) return false;
-    if (other is !CustomStyleOptions) return false;
+    if (other is! CustomStyleOptions) return false;
     final CustomStyleOptions typedOther = other;
     return enabled == typedOther.enabled &&
         styleData == typedOther.styleData &&
@@ -241,10 +240,9 @@ class CustomStyleOptions {
   }
 
   @override
-  int get hashCode => hashValues(enabled, styleData, styleExtraData);
+  int get hashCode => Object.hash(enabled, styleData, styleExtraData);
 
   CustomStyleOptions clone() {
-    return CustomStyleOptions(enabled,
-        styleData: styleData, styleExtraData: styleExtraData);
+    return CustomStyleOptions(enabled, styleData: styleData, styleExtraData: styleExtraData);
   }
 }

@@ -1,5 +1,4 @@
 import 'package:amap_flutter_base/amap_flutter_base.dart';
-import 'package:flutter/cupertino.dart';
 
 /// 相机位置，包含可视区域的位置参数。
 class CameraPosition {
@@ -66,11 +65,10 @@ class CameraPosition {
   }
 
   @override
-  int get hashCode => hashValues(bearing, target, tilt, zoom);
+  int get hashCode => Object.hash(bearing, target, tilt, zoom);
 
   @override
-  String toString() =>
-      'CameraPosition(bearing: $bearing, target: $target, tilt: $tilt, zoom: $zoom)';
+  String toString() => 'CameraPosition(bearing: $bearing, target: $target, tilt: $tilt, zoom: $zoom)';
 }
 
 /// 描述地图状态将要发生的变化
