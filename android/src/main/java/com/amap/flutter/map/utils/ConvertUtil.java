@@ -28,7 +28,8 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 
-import io.flutter.view.FlutterMain;
+import io.flutter.embedding.engine.loader.FlutterLoader;
+
 
 /**
  * @author whm
@@ -325,6 +326,7 @@ public class ConvertUtil {
 
     public static BitmapDescriptor toBitmapDescriptor(Object o) {
         final List<?> data = toList(o);
+        FlutterLoader loader = new FlutterLoader();
         switch (toString(data.get(0))) {
             case "defaultMarker":
                 if (data.size() == 1) {
@@ -334,16 +336,16 @@ public class ConvertUtil {
                 }
             case "fromAsset":
                 if (data.size() == 2) {
-                    return BitmapDescriptorFactory.fromAsset(
-                            FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
+                    String str = loader.getLookupKeyForAsset(toString(data.get(1)));
+                    return BitmapDescriptorFactory.fromAsset(str);
                 } else {
-                    return BitmapDescriptorFactory.fromAsset(
-                            FlutterMain.getLookupKeyForAsset(toString(data.get(1)), toString(data.get(2))));
+                    String str = loader.getLookupKeyForAsset(toString(data.get(1)), toString(data.get(2)));
+                    return BitmapDescriptorFactory.fromAsset(str);
                 }
             case "fromAssetImage":
                 if (data.size() == 3) {
-                    return BitmapDescriptorFactory.fromAsset(
-                            FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
+                    String str = loader.getLookupKeyForAsset(toString(data.get(1)));
+                    return BitmapDescriptorFactory.fromAsset(str);
                 } else {
                     throw new IllegalArgumentException(
                             "'fromAssetImage' Expected exactly 3 arguments, got: " + data.size());
