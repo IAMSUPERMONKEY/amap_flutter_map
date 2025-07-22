@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Location;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
@@ -336,15 +337,17 @@ public class ConvertUtil {
                 }
             case "fromAsset":
                 if (data.size() == 2) {
-                    String str = loader.getLookupKeyForAsset(toString(data.get(1)));
+                    String str = "flutter_assets/" + toString(data.get(1));
+//                    String str = loader.getLookupKeyForAsset(b);
                     return BitmapDescriptorFactory.fromAsset(str);
                 } else {
-                    String str = loader.getLookupKeyForAsset(toString(data.get(1)), toString(data.get(2)));
+                    String str =  toString(data.get(1)) + toString(data.get(2));
                     return BitmapDescriptorFactory.fromAsset(str);
                 }
             case "fromAssetImage":
                 if (data.size() == 3) {
-                    String str = loader.getLookupKeyForAsset(toString(data.get(1)));
+                    String str = "flutter_assets/" + toString(data.get(1));
+//                    String str = loader.getLookupKeyForAsset(toString(data.get(1)));
                     return BitmapDescriptorFactory.fromAsset(str);
                 } else {
                     throw new IllegalArgumentException(

@@ -94,6 +94,13 @@ public class AMapFlutterMapPlugin implements
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         LogUtil.i(CLASS_NAME, "onAttachedToActivity==>");
         lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
+        pluginBinding.getPlatformViewRegistry().registerViewFactory(
+                VIEW_TYPE,
+                new AMapPlatformViewFactory(
+                        pluginBinding.getBinaryMessenger(),
+                        () -> lifecycle
+                )
+        );
     }
 
     @Override
