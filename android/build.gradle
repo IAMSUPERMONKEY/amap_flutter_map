@@ -33,10 +33,10 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
-    dependencies {
+    dependencies {com.amap.api:3dmap:10.0.600
         implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-        implementation('com.amap.api:3dmap:10.0.600')
+        implementation('')
     }
     lint {
         checkReleaseBuilds false
