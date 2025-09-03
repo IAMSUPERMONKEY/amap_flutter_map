@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.5.0'
+        classpath 'com.android.tools.build:gradle:8.4.0'
     }
 }
 
@@ -33,10 +33,10 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
-    dependencies {com.amap.api:3dmap:10.0.600
+    dependencies {
         implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-        implementation('')
+        implementation('com.amap.api:3dmap:10.0.600')
     }
     lint {
         checkReleaseBuilds false
